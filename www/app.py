@@ -1,19 +1,29 @@
-import logging; logging.baseConfig(level=logging.INFO)
+'''
+async web application.
+'''
+
+import logging; logging.basicConfig(level=logging.INFO)
+
 import asyncio, os, json, time
 from datetime import datetime
+
 from aiohttp import web
 
 def index(request):
-    return web.Response(body=b'<h1>Awesome</h1>')
+    return web.Response(body=b'<h1>Awesome</h1>',headers={'content-type':'text/html'})
 
-@asyncio.coroutine
-def init(loop):
-    app = web.Application(loop=loop)
-    app.route.add_route('GET','/',index)
-    srv = yield from loop.create_server(app.mk_handler(),'127.0.0.1',9000)
-    logging.info('server start at 127.0.0.1:9000')
-    return srv
-
+async def init(loop):
+    # app = web.Application(loop=loop)
+    #循环参数弃用
+    app = web.Application()
+    app.router.add_route('GET', '/', index)
+    # srv = await loop.create_server(app.make_handler(), '127.0.0.1', 9000)
+    # logging.info('server started at http://127.0.0.1:9000...')
+    # return srv
+    # runner = web.AppRunner(app)
+    #     # await runner.setup()
+    #     # site = web.TCPSite(runner, 'localhost', 8080)
+    #     # await site.start()
 loop = asyncio.get_event_loop()
 loop.run_until_complete(init(loop))
 loop.run_forever()
