@@ -31,7 +31,7 @@ def toDict(d):
         D[k] = toDict(v) if isinstance(v, dict) else v
     return D
 
-configs = config_default.configs
+configs = config_default.config
 
 try:
     import config_override
